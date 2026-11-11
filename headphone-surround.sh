@@ -406,7 +406,13 @@ build_plugin() {
 resolve_ir() {
     local p
     if [[ $1 == *.wav && -f $1 ]]; then p=$(realpath "$1"); else p="$HRIR/$1.wav"; fi
-    [[ -f $p ]] || die "preset '$1' not found. See: $0 list"
+    if [[ ! -f $p ]]; then
+        case $1 in
+            steering|matrix|film-stereo|gain|device)
+                die "'$1' is a command, not a preset. Use: $0 $1 <value>   (see: $0 help)" ;;
+        esac
+        die "preset '$1' not found. See: $0 list"
+    fi
     [[ $p != *'"'* ]] || die "file path must not contain double quotes."
     is_hrir "$p" || die "$p is not a HeSuVi 7.1 file (need 14 channels, 48 kHz)."
     printf '%s\n' "$p"
@@ -681,10 +687,10 @@ apply_upmix() {
 # --- commands --------------------------------------------------------------
 cmd_install() {
     require_user_pipewire
-    [[ -n ${1:-} ]] && state_set CURRENT_IR "$1"
     local before; before=$(pactl get-default-sink 2>/dev/null || true)
     ensure_packages
     fetch_hesuvi
+    if [[ -n ${1:-} ]]; then resolve_ir "$1" >/dev/null; state_set CURRENT_IR "$1"; fi
     rm -rf "$DATA/matrix"   # FIR kernels from version 2, replaced by the plugin
     build_plugin
     current; resolve_ir "$IR" >/dev/null
