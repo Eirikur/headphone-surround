@@ -15,7 +15,7 @@ Both use HeSuVi impulse responses captured from commercial virtualizers (Dolby A
 ./headphone-surround.sh uninstall --purge  # also deletes the downloaded presets
 ```
 
-Install restarts PipeWire's PulseAudio layer, so audio apps blink for a second. Stop Persona first (`pstop`).
+Install restarts PipeWire's PulseAudio layer, so audio apps blink for a second. Stop Persona first.
 
 ## Everyday use
 
@@ -25,7 +25,7 @@ Pick the output in the sound menu:
 |---|---|
 | Films, TV, games | Headphone Surround - Film |
 | Stereo music | Headphone Surround - Music |
-| Plain, no processing | Family 17h/19h (your headphone jack) |
+| Plain, no processing | Family (your headphone jack) |
 
 Media players that were already open (e.g. mpv) need a restart after a `film-stereo` change.
 
